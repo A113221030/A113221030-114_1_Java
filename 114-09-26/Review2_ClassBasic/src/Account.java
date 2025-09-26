@@ -1,15 +1,12 @@
+import java.util.Scanner;
+
 public class Account {
     private String accountNumber;
     private double balance;
 
-    public Account(String accountNumber, double initialBalance) {
-        this.setAccountNumber(accountNumber);
-        try{
-            this.setBalance(initialBalance);
-        }catch(IllegalArgumentException e) {
-            System.out.println("初始餘額錯誤:"+ e.getMessage()+",將餘額設為0");
-            this.balance =0;
-        }
+    public Account(String accountNumber, double balance) {
+        this.accountNumber = accountNumber;
+        setBalance(balance);
     }
 
     public String getAccountNumber() {
@@ -19,34 +16,46 @@ public class Account {
     public double getBalance() {
         return balance;
     }
-    public void setBalance(double balance){
-        if(balance > 0){
-            this.balance = balance;
-        }else{
-            throw new IllegalArgumentException("帳戶餘額必須為正數");
-        }
-    }
 
-    public void setAccountNumber(String accountNumber){
-        this.accountNumber =accountNumber;
+    public void setBalance(double balance) {
+        int attempts = 0;
+        Scanner scanner = new Scanner(System.in);
+        while (balance < 0 && attempts < 3) {
+            System.out.println("餘額必須為正數，請重新輸入：");
+            balance = scanner.nextDouble();
+            attempts++;
+        }
+        if (balance < 0) {
+            throw new IllegalArgumentException("餘額必須為正數");
+        }
+        this.balance = balance;
     }
 
     public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-        } else {
-            System.out.println("Deposit amount must be positive.");
+        int attempts = 0;
+        Scanner scanner = new Scanner(System.in);
+        while (amount <= 0 && attempts < 3) {
+            System.out.println("存款金額必須為正數，請重新輸入：");
+            amount = scanner.nextDouble();
+            attempts++;
         }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("存款金額必須為正數");
+        }
+        this.balance += amount;
     }
 
-
-    public boolean withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-            return true;
-        } else {
-            System.out.println("Insufficient funds or invalid amount.");
-            return false;
+    public void withdraw(double amount) {
+        int attempts = 0;
+        Scanner scanner = new Scanner(System.in);
+        while ((amount <= 0 || amount > balance) && attempts < 3) {
+            System.out.println("提款金額必須為正數且小於等於餘額，請重新輸入：");
+            amount = scanner.nextDouble();
+            attempts++;
         }
+        if (amount <= 0 || amount > balance) {
+            throw new IllegalArgumentException("提款金額必須為正數且小於等於餘額");
+        }
+        this.balance -= amount;
     }
 }
