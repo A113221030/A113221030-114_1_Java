@@ -6,23 +6,24 @@ public class Account {
     // 帳戶號碼，唯一識別每個帳戶
     private String accountNumber;
     // 帳戶擁有者名稱
-    private String ownerName;
+    //private String ownerName;
     private Person owner;
     // 帳戶餘額
     private double balance;
 
-    private Date openingDate;
-    private Time2 openongTime;
 
+    //帳戶開立日期與時間
+    private Date openingDate;
+    private Time2 openingTime;
     /**
      * 建構子，初始化帳戶號碼與初始餘額
      * @param accountNumber 帳戶號碼
      * @param initialBalance 初始餘額
      */
-    public Account(String accountNumber, String  ownerName, String  ownerID , double initialBalance) {
-        LocalDateTime now = LocalDateTime.now();
+    public Account(String accountNumber, String ownerName, String ownerID,double initialBalance) {
+        LocalDateTime now = LocalDateTime.now();// 取得目前日期與時間
         this.setAccountNumber(accountNumber);
-        this.owner = new Person(ownerID);
+        this.owner = new Person(ownerName, ownerID);
         try {
             this.setBalance(initialBalance);
         } catch (IllegalArgumentException e) {
@@ -30,20 +31,21 @@ public class Account {
         }
         accountCount++; // 帳戶數量加1
 
-        this.openingDate = new Date(now.getMonthValue(), now.getDayOfMonth(),now.getYear());
-        this.openongTime = new Time2(now.getHour(), now.getMinute(), now.getSecond());
+        // 記錄帳戶開立的日期與時間
+        this.openingDate = new Date(now.getMonthValue(),now.getDayOfMonth(),now.getYear()); // 假設 Date 類別有無參數建構子
+        this.openingTime = new Time2(now.getHour(), now.getMinute(), now.getSecond()); // 假設 Time2 類別有無參數建構子
     }
 
     public Account(String accountNumber, double initialBalance) {
-        this(accountNumber,ownerName "未知", initialBalance);
+        this(accountNumber, "未知", "00000000",initialBalance);
     }
 
     public Account() {
-        this("未知", "未知", 0);
+        this("未知", "未知", "00000000",0);
     }
 
     public Account(String accountNumber) {
-        this(accountNumber, "未知", 0);
+        this(accountNumber, "未知", "00000000",0);
     }
 
     /**
@@ -67,7 +69,7 @@ public class Account {
      * @return 帳戶擁有者名稱
      */
     public String getOwnerName() {
-        return ownerName;
+        return getOwnerName();
     }
 
     /**
@@ -116,8 +118,9 @@ public class Account {
             throw new IllegalArgumentException("提款金額不合法");
         }
     }
-    public String toString(){
-        return String.format("帳戶號碼:%s, 持有人:%s, 餘額:%.2f, 開戶日期:%s, 開戶時間:%s",
-                accountNumber, owner.toString(), balance, openingDate.toString(), openongTime.toUniversalString());
+
+    public String toString() {
+        return String.format("帳戶號碼: %s, 持有人: %s, 餘額: %.2f, 開立日期: %s, 開立時間: %s",
+                accountNumber, owner.toString(), balance, openingDate.toString(), openingTime.toString());
     }
 }

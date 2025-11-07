@@ -5,11 +5,11 @@ import java.util.Scanner;
 public class AccountTest {
     public static void main(String[] args) {
         List<Account> customers = new ArrayList<>(); // 儲存客戶帳戶的List
-        Account acc1 = new Account(accoun"A001", "Alice", 5000);
+        Account acc1 = new Account("A001", "Alice", "A33334444",5000);
         addCustomer(customers, acc1);
-        Account acc2 = new Account("A002", "Bob", 3000);
+        Account acc2 = new Account("A002", "Bob", "A12345678",3000);
         addCustomer(customers, acc2);
-        Account acc3 = new Account("A003", "Charlie", -100);
+        Account acc3 = new Account("A003", "Charlie","H11111111" ,-100);
         addCustomer(customers,  acc3);
 
         operation(customers);
@@ -23,7 +23,7 @@ public class AccountTest {
         Account selectedAccount = null;
         while (true) {
             menu();
-            System.out.print("請選擇功能(1-5): ");
+            System.out.print("請選擇功能(1-7): ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // 清除換行符號
             switch (choice) {
@@ -42,7 +42,6 @@ public class AccountTest {
                     String searchAccNum = scanner.nextLine();
                     selectedAccount = customerInAction(customers, searchAccNum);
                     printCustomerInfo(selectedAccount);
-                    //System.out.println(selectedAccount.toString());
                     break;
 
                 case 3:
@@ -55,6 +54,32 @@ public class AccountTest {
                     deleteCustomer(customers, deleteAccNum);
                     break;
                 case 5:
+                    System.out.print("輸入要存款的帳戶號碼: ");
+                    String depositAccNum = scanner.nextLine();
+                    Account depositAccount = customerInAction(customers, depositAccNum);
+                    if (depositAccount != null) {
+                        System.out.print("輸入存款金額: ");
+                        double depositAmount = scanner.nextDouble();
+                        depositAccount.deposit(depositAmount);
+                        System.out.println("存款成功，新的餘額為: " + depositAccount.getBalance());
+                    }
+                    break;
+                case 6:
+                    System.out.print("輸入要提款的帳戶號碼: ");
+                    String withdrawAccNum = scanner.nextLine();
+                    Account withdrawAccount = customerInAction(customers, withdrawAccNum);
+                    if (withdrawAccount != null) {
+                        System.out.print("輸入提款金額: ");
+                        double withdrawAmount = scanner.nextDouble();
+                        try {
+                            withdrawAccount.withdraw(withdrawAmount);
+                            System.out.println("提款成功，新的餘額為: " + withdrawAccount.getBalance());
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("提款失敗: " + e.getMessage());
+                        }
+                    }
+                    break;
+                case 7:
                     System.out.println("離開系統，謝謝使用!");
                     return;
                 default:
@@ -104,12 +129,14 @@ public class AccountTest {
     }
 
     // 功能選單 (1) 新增客戶 (2) 列印指定客戶帳戶資訊 (3) 顯示所有客戶帳戶資訊 (4) 刪除客戶帳戶 (5) 離開
-        public static void menu() {
-            System.out.println("功能選單:");
-            System.out.println("1. 新增客戶");
-            System.out.println("2. 列印指定客戶帳戶資訊");
-            System.out.println("3. 顯示所有客戶帳戶資訊");
-            System.out.println("4. 刪除客戶帳戶");
-            System.out.println("5. 離開");
-        }
+    public static void menu() {
+        System.out.println("功能選單:");
+        System.out.println("1. 新增客戶");
+        System.out.println("2. 列印指定客戶帳戶資訊");
+        System.out.println("3. 顯示所有客戶帳戶資訊");
+        System.out.println("4. 刪除客戶帳戶");
+        System.out.println("5. 存款");
+        System.out.println("6. 提款");
+        System.out.println("7. 離開");
+    }
 }
