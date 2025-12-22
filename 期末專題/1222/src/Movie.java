@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Movie extends Content {
     public Movie(String title, int ageRating, String region, boolean isPremiumOnly) {
         super(title, ageRating, region, isPremiumOnly);
@@ -5,17 +8,11 @@ public class Movie extends Content {
 
     @Override
     public void play(User user) throws Exception {
-        // 這裡可以做進階檢查
-        System.out.println("🎬 成功播放電影：" + this.title + " (畫質：" + user.subscription.resolution + ")");
+        super.play(user);
+        System.out.println("🎥 正在播放電影：" + this.title);
     }
 
-    // --- 補上遺失的 Categorizable 介面方法 ---
-    @Override
-    public boolean matchesCategory(String category) {
-        return this.categories.contains(category);
-    }
-
-    @Override public void pause() { System.out.println("暫停電影"); }
-    @Override public void resume() { System.out.println("繼續電影"); }
-    @Override public void seek(int pos) { System.out.println("跳轉至 " + pos + " 秒"); }
+    @Override public void pause() { System.out.println("電影暫停"); }
+    @Override public void resume() { System.out.println("電影恢復"); }
+    @Override public void seek(int pos) { System.out.println("電影跳轉至 " + pos + " 秒"); }
 }
