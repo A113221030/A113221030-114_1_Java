@@ -1,20 +1,34 @@
 import java.util.ArrayList;
-import java.util.List;
 
-public class User {
+public class User implements WatchHistoryTrackable {
     public String name;
     public int age;
-    public String currentRegion;
+    public String region;
     public Subscription subscription;
-    public boolean isLoggedIn = true;
-    public int currentActiveDevices = 0;
-    // 紀錄看過的影片 ID
-    public List<String> watchHistory = new ArrayList<>();
+    private ArrayList<Content> watchHistory = new ArrayList<>(); // 觀看紀錄儲存處
 
-    public User(String name, int age, String region, Subscription sub) {
+    public User(String name, int age, String region, Subscription subscription) {
         this.name = name;
         this.age = age;
-        this.currentRegion = region;
-        this.subscription = sub;
+        this.region = region;
+        this.subscription = subscription;
+    }
+
+    // --- 實作 WatchHistoryTrackable ---
+    @Override
+    public void addToHistory(Content content) {
+        if (!watchHistory.contains(content)) {
+            watchHistory.add(content);
+        }
+    }
+
+    @Override
+    public ArrayList<Content> getWatchHistory() {
+        return watchHistory;
+    }
+
+    @Override
+    public void clearHistory() {
+        watchHistory.clear();
     }
 }

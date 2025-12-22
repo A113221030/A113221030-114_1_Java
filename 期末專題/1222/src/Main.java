@@ -1,30 +1,44 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        // 1. 創立方案 (這裡要確保這些變數在 try 外面定義，後面才讀得到)
-        Subscription free = new FreeTier();
-        Subscription vip = new PremiumPlan();
+        // 1. 建立使用者與內容
+        User user = new User("小明", 20, "Taiwan", new PremiumPlan());
 
-        // 2. 創立使用者
-        User user = new User("小明", 15, "Taiwan", free);
+        Series op = new Series("航海王", 12, "Taiwan", false, new ArrayList<>());
+        op.addCategory("冒險");
+        op.addCategory("熱血");
 
-        // 3. 創立內容
-        Movie movie = new Movie("恐怖電影", 18, "Taiwan", true);
+        Documentary doc = new Documentary("我們的星球", 0, "Taiwan", false, "自然");
+        doc.addCategory("自然");
 
-        System.out.println("--- 第一次嘗試播放 ---");
-        try {
-            movie.play(user); // 這裡會因為小明才 15 歲而失敗
-        } catch (Exception e) {
-            System.out.println("❌ 播放失敗：" + e.getMessage());
+        // 2. 模擬觀看過程並記錄
+        System.out.println("====== 📺 觀看流程啟動 ======");
+
+        // 觀看航海王
+        playAndRecord(user, op);
+
+        // 3. 展示觀看紀錄
+        System.out.println("\n--- 📜 您的觀看紀錄 ---");
+        for (Content c : user.getWatchHistory()) {
+            System.out.println("已觀看：" + c.title);
         }
 
-        System.out.println("\n--- 升級成 VIP 並長大後再試 ---");
-        user.age = 20;            // 修改年齡
-        user.subscription = vip;   // 修改方案
+        // 4. 推薦系統演示
+        System.out.println("\n--- 💡 系統推薦分數 ---");
+        System.out.println(doc.title + " 的推薦指數：" + doc.getRecommendationScore(user) + " / 10.0");
+    }
 
+    public static void playAndRecord(User user, Content content) {
         try {
-            movie.play(user); // 這次就會成功
+            if (content.isAccessibleBy(user)) {
+                content.play(user);
+                user.addToHistory(content); // 自動加入紀錄
+                System.out.println(">> [系統] 已將 " + content.title + " 加入您的觀看紀錄");
+            }
         } catch (Exception e) {
-            System.out.println("❌ 播放失敗：" + e.getMessage());
+            System.out.println("播放失敗：" + e.getMessage());
         }
     }
 }

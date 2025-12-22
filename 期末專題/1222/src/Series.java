@@ -1,6 +1,5 @@
 import java.util.List;
-
-class Series extends Content {
+public class Series extends Content {
     List<Episode> episodes;
 
     public Series(String title, int minAge, String region, boolean isPremium, List<Episode> episodes) {
@@ -8,26 +7,16 @@ class Series extends Content {
         this.episodes = episodes;
     }
 
-    public Episode getNextEpisode(Episode current) {
-        int currentIndex = episodes.indexOf(current);
-
-        // 如果還有下一集
-        if (currentIndex < episodes.size() - 1) {
-            return episodes.get(currentIndex + 1);
+    @Override
+    public void play(User user) throws Exception {
+        super.play(user); // 執行 Content 的檢查
+        System.out.println("✅ 正在播放影集：" + this.title);
+        if (episodes != null && !episodes.isEmpty()) {
+            System.out.println(">> 即將播放第 1 集：" + episodes.get(0).title);
         }
-
-        // 如果是最後一集了
-        System.out.println("這已經是本季最後一集囉！");
-        return null;
     }
-}
 
-class Episode {
-    String title;
-    int episodeNumber;
-
-    public Episode(String title, int number) {
-        this.title = title;
-        this.episodeNumber = number;
-    }
+    @Override public void pause() { System.out.println("影集暫停"); }
+    @Override public void resume() { System.out.println("影集恢復"); }
+    @Override public void seek(int pos) { System.out.println("影集跳轉至 " + pos + " 秒"); }
 }

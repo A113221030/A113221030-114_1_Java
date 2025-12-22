@@ -1,0 +1,19 @@
+public class LiveStream extends Content {
+    public int viewerCount;
+
+    public LiveStream(String title, int ageRating, String region, boolean isPremium, int viewers) {
+        super(title, ageRating, region, isPremium);
+        this.viewerCount = viewers;
+    }
+
+    @Override
+    public void play(User user) throws Exception {
+        super.play(user);
+        System.out.println("🔴 正在直播：" + this.title);
+        System.out.println("🔥 目前觀看人數：" + this.viewerCount + " 人");
+    }
+
+    @Override public void pause() { System.out.println("❌ 直播無法暫停"); }
+    @Override public void resume() { System.out.println("同步畫面中..."); }
+    @Override public void seek(int pos) { System.out.println("⚠️ 直播不支援跳轉"); }
+}
