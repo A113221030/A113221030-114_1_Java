@@ -77,4 +77,22 @@ public abstract class Content implements Playable, Categorizable, Recommendable,
         }
         return Math.min(score, 10.0); // 最高 10 分
     }
+    // 在 Content 類別內補上這個方法
+    @Override
+    public ArrayList<Content> getSimilarContent(List<Content> allContent) {
+        ArrayList<Content> similar = new ArrayList<>();
+        for (Content other : allContent) {
+            // 排除掉自己
+            if (other == this) continue;
+
+            // 檢查是否有共同的分類標籤
+            for (String cat : this.categories) {
+                if (other.matchesCategory(cat)) {
+                    similar.add(other);
+                    break; // 只要有一個分類中就加入，跳到下一個物件
+                }
+            }
+        }
+        return similar;
+    }
 }
